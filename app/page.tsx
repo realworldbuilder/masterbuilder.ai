@@ -17,13 +17,13 @@ export default function Home() {
   const [inputValue, setInputValue] = useState("");
   const [topic, setTopic] = useState("");
   const [showResult, setShowResult] = useState(false);
-  const [sources, setSources] = useState<{ name: string; url: string }[]>([]);
+  const [sources, setSources] = useState<{ name: string; url: string; isApi?: boolean }[]>([]);
   const [isLoadingSources, setIsLoadingSources] = useState(false);
   const [messages, setMessages] = useState<{ role: string; content: string }[]>(
     [],
   );
   const [loading, setLoading] = useState(false);
-  const [ageGroup, setAgeGroup] = useState("Middle School");
+  const [builderLevel, setBuilderLevel] = useState("Vibe Coder");
 
   const handleInitialChat = async () => {
     setShowResult(true);
@@ -121,8 +121,15 @@ export default function Home() {
       parsedSources = await parsedSourcesRes.json();
     }
 
+    // Count how many API sources we found
+    const apiSourceCount = sources.filter((source: {isApi?: boolean}) => source.isApi).length;
+
+    // Create the enhanced system prompt that includes API information
     const initialMessage = [
-      { role: "system", content: getSystemPrompt(parsedSources, ageGroup) },
+      { 
+        role: "system", 
+        content: getEnhancedSystemPrompt(parsedSources, builderLevel, apiSourceCount)
+      },
       { role: "user", content: `${question}` },
     ];
     setMessages(initialMessage);
@@ -158,8 +165,8 @@ export default function Home() {
             promptValue={inputValue}
             setPromptValue={setInputValue}
             handleChat={handleChat}
-            ageGroup={ageGroup}
-            setAgeGroup={setAgeGroup}
+            builderLevel={builderLevel}
+            setBuilderLevel={setBuilderLevel}
             handleInitialChat={handleInitialChat}
           />
         )}
@@ -167,4 +174,46 @@ export default function Home() {
       {/* <Footer /> */}
     </>
   );
+}
+
+// Function to generate an enhanced system prompt that includes API information
+function getEnhancedSystemPrompt(
+  finalResults: { fullContent: string }[],
+  builderLevel: string,
+  apiSourceCount: number
+) {
+  return `
+  You are a professional mentor and guide for digital builders who is an expert at building systems, apps, AI agents, and technical workflows. You are also knowledgeable about APIs and integrations. Given a topic and the relevant information, guide the user through practical implementation at a ${builderLevel} level.
+
+  Start by greeting the builder, providing a concise overview of the concept, and then offer a few clear paths forward (in markdown numbers). Maintain an engaging, action-oriented conversation and occasionally check their understanding with practical application questions after explaining key concepts.
+
+  ${apiSourceCount > 0 ? `
+  Since there are relevant APIs for this topic, include a dedicated "Recommended APIs" section in your response. For each API that could help with this task:
+  • Provide the name and a brief description
+  • Explain its primary use cases
+  • Note any key advantages
+  • Mention pricing model if available in the sources
+  ` : ''}
+
+  Keep your initial message brief and focused, with an emphasis on practical implementation.
+
+  Here is the reference information:
+
+  <reference_info>
+  ${"\n"}
+  ${finalResults
+    .slice(0, 7)
+    .map(
+      (result, index) => `## Resource #${index}:\n ${result.fullContent} \n\n`,
+    )}
+  </reference_info>
+
+  Here's the builder level to calibrate for:
+
+  <builder_level>
+  ${builderLevel}
+  </builder_level>
+
+  Please format your response in clear, well-structured markdown. Focus on actionable steps, relevant tools, APIs, and practical implementation. 
+  `;
 }

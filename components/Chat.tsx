@@ -1,7 +1,7 @@
 import ReactMarkdown from "react-markdown";
 import FinalInputArea from "./FinalInputArea";
 import { useEffect, useRef, useState } from "react";
-import simpleLogo from "../public/simple-logo.png";
+import camelLogo from "../public/camel_whitebg.png";
 import Image from "next/image";
 
 export default function Chat({
@@ -75,18 +75,20 @@ export default function Chat({
                 message.role === "assistant" ? (
                   <div className="relative w-full" key={index}>
                     <Image
-                      src={simpleLogo}
+                      src={camelLogo}
                       alt=""
-                      className="absolute left-0 top-0 !my-0 size-7"
+                      width={36}
+                      height={36}
+                      className="absolute left-0 top-0 !my-0 size-9 object-contain"
                     />
-                    <ReactMarkdown className="w-full pl-10">
+                    <ReactMarkdown className="w-full pl-12">
                       {message.content}
                     </ReactMarkdown>
                   </div>
                 ) : (
                   <p
                     key={index}
-                    className="ml-auto w-fit rounded-xl bg-blue-500 p-4 font-medium text-white"
+                    className="ml-auto w-fit rounded-xl bg-primary p-4 font-medium text-white"
                   >
                     {message.content}
                   </p>

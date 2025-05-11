@@ -4,15 +4,22 @@ export default function Sources({
   sources,
   isLoading,
 }: {
-  sources: { name: string; url: string }[];
+  sources: { name: string; url: string; isApi?: boolean }[];
   isLoading: boolean;
 }) {
+  const apiCount = sources.filter(source => source.isApi).length;
+  
   return (
     <div className="bg-white max-lg:-order-1 lg:flex lg:w-full lg:max-w-[300px] lg:flex-col">
-      <div className="flex items-start gap-4 pb-3 lg:pb-3.5">
+      <div className="flex items-start justify-between gap-4 pb-3 lg:pb-3.5">
         <h3 className="text-base font-bold uppercase leading-[152.5%] text-black">
           sources:{" "}
         </h3>
+        {apiCount > 0 && (
+          <span className="rounded-full bg-orange-100 px-2 py-0.5 text-xs font-semibold text-orange-700">
+            {apiCount} APIs found
+          </span>
+        )}
       </div>
       <div className="flex w-full items-center gap-6 pb-4 max-lg:overflow-x-scroll lg:grow lg:flex-col lg:gap-4 lg:overflow-y-scroll lg:pb-0">
         {isLoading ? (
@@ -39,9 +46,9 @@ export default function Sources({
   );
 }
 
-const SourceCard = ({ source }: { source: { name: string; url: string } }) => {
+const SourceCard = ({ source }: { source: { name: string; url: string; isApi?: boolean } }) => {
   return (
-    <div className="flex h-[79px] w-full items-center gap-2.5 rounded-lg border border-gray-100 px-1.5 py-1 shadow-md">
+    <div className={`flex h-[79px] w-full items-center gap-2.5 rounded-lg border px-1.5 py-1 shadow-md ${source.isApi ? 'border-orange-200 bg-orange-50' : 'border-gray-100'}`}>
       <div className="shrink-0">
         <Image
           unoptimized
@@ -53,7 +60,14 @@ const SourceCard = ({ source }: { source: { name: string; url: string } }) => {
         />
       </div>
       <div className="flex min-w-0 max-w-[192px] flex-col justify-center gap-1">
-        <h6 className="line-clamp-2 text-xs font-light">{source.name}</h6>
+        <div className="flex items-center gap-1">
+          <h6 className="line-clamp-2 text-xs font-light">{source.name}</h6>
+          {source.isApi && (
+            <span className="shrink-0 rounded-sm bg-orange-200 px-1 py-0.5 text-[10px] font-semibold text-orange-700">
+              API
+            </span>
+          )}
+        </div>
         <a
           target="_blank"
           rel="noopener noreferrer"

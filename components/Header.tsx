@@ -4,7 +4,13 @@ const Header = () => {
   return (
     <div className="container flex h-[60px] shrink-0 items-center justify-center px-4 lg:h-[80px] lg:px-0">
       <a href="/">
-        <Logo className="w-30 sm:w-36" />
+        <div className="flex items-center">
+          <span className="text-xl font-bold">
+            <span>🏗️ </span>
+            <span className="bg-gradient-to-r from-primary to-[#FF7B29] bg-clip-text font-bold text-transparent">Master</span>
+            <span className="text-black">Builder</span>
+          </span>
+        </div>
       </a>
     </div>
   );

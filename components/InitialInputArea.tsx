@@ -7,8 +7,8 @@ type TInputAreaProps = {
   setPromptValue: React.Dispatch<React.SetStateAction<string>>;
   disabled?: boolean;
   handleChat: (messages?: { role: string; content: string }[]) => void;
-  ageGroup: string;
-  setAgeGroup: React.Dispatch<React.SetStateAction<string>>;
+  builderLevel: string;
+  setBuilderLevel: React.Dispatch<React.SetStateAction<string>>;
   handleInitialChat: () => void;
 };
 
@@ -17,8 +17,8 @@ const InitialInputArea: FC<TInputAreaProps> = ({
   setPromptValue,
   disabled,
   handleInitialChat,
-  ageGroup,
-  setAgeGroup,
+  builderLevel,
+  setBuilderLevel,
 }) => {
   const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter") {
@@ -41,7 +41,7 @@ const InitialInputArea: FC<TInputAreaProps> = ({
     >
       <div className="flex w-full rounded-lg border">
         <textarea
-          placeholder="Teach me about..."
+          placeholder="I want to build..."
           className="block w-full resize-none rounded-l-lg border-r p-6 text-sm text-gray-900 placeholder:text-gray-400 sm:text-base"
           disabled={disabled}
           value={promptValue}
@@ -52,25 +52,24 @@ const InitialInputArea: FC<TInputAreaProps> = ({
         />
         <div className="flex items-center justify-center">
           <select
-            id="grade"
-            name="grade"
+            id="level"
+            name="level"
             className="ring-none h-full rounded-md rounded-r-lg border-0 bg-transparent px-2 text-sm font-medium text-black focus:ring-0 sm:text-base"
-            value={ageGroup}
-            onChange={(e) => setAgeGroup(e.target.value)}
+            value={builderLevel}
+            onChange={(e) => setBuilderLevel(e.target.value)}
           >
-            <option>Elementary School</option>
-            <option>Middle School</option>
-            <option>High School</option>
-            <option>College</option>
-            <option>Undergrad</option>
-            <option>Graduate</option>
+            <option>Vibe Coder</option>
+            <option>Tinkerer</option>
+            <option>System Synth</option>
+            <option>Stack Operator</option>
+            <option>MasterBuilder</option>
           </select>
         </div>
       </div>
       <button
         disabled={disabled}
         type="submit"
-        className="relative flex size-[72px] w-[358px] shrink-0 items-center justify-center rounded-md bg-[linear-gradient(154deg,#2A8EF9_23.37%,#175CB6_91.91%)] disabled:pointer-events-none disabled:opacity-75 sm:ml-3 sm:w-[72px]"
+        className="relative flex size-[72px] w-[358px] shrink-0 items-center justify-center rounded-md bg-orange-gradient disabled:pointer-events-none disabled:opacity-75 sm:ml-3 sm:w-[72px]"
       >
         {disabled && (
           <div className="absolute inset-0 flex items-center justify-center">
@@ -86,7 +85,7 @@ const InitialInputArea: FC<TInputAreaProps> = ({
           height={24}
           className={disabled ? "invisible" : ""}
         />
-        <span className="ml-2 font-bold text-white sm:hidden">Search</span>
+        <span className="ml-2 font-bold text-white sm:hidden">Build</span>
       </button>
     </form>
   );

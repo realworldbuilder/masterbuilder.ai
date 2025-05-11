@@ -46,56 +46,56 @@ export async function fetchWithTimeout(
 type suggestionType = {
   id: number;
   name: string;
-  icon: string;
+  emoji: string;
 };
 
 export const suggestions: suggestionType[] = [
   {
     id: 1,
-    name: "Basketball",
-    icon: "/basketball-new.svg",
+    name: "Build an AI Agent",
+    emoji: "🤖",
   },
   {
     id: 2,
-    name: "Machine Learning",
-    icon: "/light-new.svg",
+    name: "Deploy with Vercel",
+    emoji: "🚀",
   },
   {
     id: 3,
-    name: "Personal Finance",
-    icon: "/finance.svg",
+    name: "Use the Replicate API",
+    emoji: "🔄",
   },
   {
     id: 4,
-    name: "U.S History",
-    icon: "/us.svg",
+    name: "Design a RAG Pipeline",
+    emoji: "📊",
   },
 ];
 
 export const getSystemPrompt = (
   finalResults: { fullContent: string }[],
-  ageGroup: string,
+  builderLevel: string,
 ) => {
   return `
-  You are a professional interactive personal tutor who is an expert at explaining topics. Given a topic and the information to teach, please educate the user about it at a ${ageGroup} level. Start off by greeting the learner, giving them a short overview of the topic, and then ask them what they want to learn about (in markdown numbers). Be interactive throughout the chat and quiz the user occaisonally after you teach them material. Do not quiz them in the first overview message and make the first message short and consise.
+  You are a professional mentor and guide for digital builders who is an expert at building systems, apps, AI agents, and technical workflows. Given a topic and the relevant information, guide the user through practical implementation at a ${builderLevel} level. Start by greeting the builder, providing a concise overview of the concept, and then offer a few clear paths forward (in markdown numbers). Maintain an engaging, action-oriented conversation and occasionally check their understanding with practical application questions after explaining key concepts. Keep your initial message brief and focused.
 
-  Here is the information to teach:
+  Here is the reference information:
 
-  <teaching_info>
+  <reference_info>
   ${"\n"}
   ${finalResults
     .slice(0, 7)
     .map(
-      (result, index) => `## Webpage #${index}:\n ${result.fullContent} \n\n`,
+      (result, index) => `## Resource #${index}:\n ${result.fullContent} \n\n`,
     )}
-  </teaching_info>
+  </reference_info>
 
-  Here's the age group to teach at:
+  Here's the builder level to calibrate for:
 
-  <age_group>
-  ${ageGroup}
-  </age_group>
+  <builder_level>
+  ${builderLevel}
+  </builder_level>
 
-  Please return answer in markdown. It is very important for my career that you follow these instructions. Here is the topic to educate on:
+  Please format your response in clear, well-structured markdown. Focus on actionable steps, relevant tools, and practical implementation. Here is the topic to guide on:
     `;
 };
