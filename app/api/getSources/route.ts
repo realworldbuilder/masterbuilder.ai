@@ -67,10 +67,10 @@ export async function POST(request: Request) {
         },
         body: JSON.stringify({
           q: finalQuestion,
-          num: 6,
+          num: 7,
         }),
       }),
-      // API-specific search
+      // API-specific search - reducing the importance of API results
       fetch("https://google.serper.dev/search", {
         method: "POST",
         headers: {
@@ -78,8 +78,8 @@ export async function POST(request: Request) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          q: `${question} API documentation developer`,
-          num: 3,
+          q: `${question} API documentation reference`,
+          num: 2,
         }),
       })
     ]);
@@ -114,16 +114,16 @@ export async function POST(request: Request) {
     // Deduplicate by URL
     const urlSet = new Set();
     
-    // First add API results
-    for (const result of apiResults) {
+    // First add general results (prioritize these)
+    for (const result of generalResults) {
       if (!urlSet.has(result.url)) {
         urlSet.add(result.url);
         combinedResults.push(result);
       }
     }
     
-    // Then add general results
-    for (const result of generalResults) {
+    // Then add API results (secondary priority)
+    for (const result of apiResults) {
       if (!urlSet.has(result.url) && combinedResults.length < 9) {
         urlSet.add(result.url);
         combinedResults.push(result);
@@ -136,73 +136,26 @@ export async function POST(request: Request) {
 
 // Helper function to determine if a result likely references an API
 function isLikelyApi(title: string, url: string): boolean {
-  // Check for common API documentation domains
-  const apiDomains = [
-    "developers.", "developer.", "api.", "apis.", "docs.", 
-    "documentation.", ".dev", "platform."
-  ];
-  
-  // Check for API documentation paths
-  const apiPaths = [
-    "/api/", "/apis/", "/developers/", "/docs/api/", "/dev/", 
-    "/documentation/api/", "/reference/", "/sdk/"
-  ];
-  
-  // API-specific patterns that strongly indicate an actual API page
-  const strongPatterns = [
-    "/api/v1", "/api/v2", "/api/v3", "rest-api", "restful-api", 
-    "graphql-api", "swagger", "openapi", "api-reference", 
-    "api-documentation", "api-guide", "api-key"
-  ];
-  
-  // Check domain first
+  // Simplified logic to be more strict about what counts as an API
+  const lowerTitle = title.toLowerCase();
   const lowerUrl = url.toLowerCase();
   
-  // If it's clearly an API endpoint URL, it's not documentation
-  if (lowerUrl.includes('api.') && 
-      (lowerUrl.includes('/v1/') || 
-       lowerUrl.includes('/v2/') || 
-       lowerUrl.includes('/v3/'))) {
-    return false;
-  }
+  // Strong API indicators in the title
+  const titleMatches = [
+    "api reference", 
+    "api documentation", 
+    "rest api",
+    "graphql api"
+  ].some(pattern => lowerTitle.includes(pattern));
   
-  // Look for strong indicators in the URL
-  for (const pattern of strongPatterns) {
-    if (lowerUrl.includes(pattern)) {
-      return true;
-    }
-  }
+  // Strong API indicators in the URL
+  const urlMatches = [
+    "/api/v", 
+    "api-reference", 
+    "api-documentation",
+    "swagger",
+    "openapi"
+  ].some(pattern => lowerUrl.includes(pattern));
   
-  // Page title patterns that strongly indicate API docs
-  const lowerTitle = title.toLowerCase();
-  const titlePatterns = [
-    "api reference", "api documentation", "developer api", 
-    "rest api", "graphql api", "sdk reference", "api guide"
-  ];
-  
-  for (const pattern of titlePatterns) {
-    if (lowerTitle.includes(pattern)) {
-      return true;
-    }
-  }
-  
-  // Check for common API domain patterns
-  const domainMatch = apiDomains.some(domain => lowerUrl.includes(domain));
-  
-  // Check for common API path patterns
-  const pathMatch = apiPaths.some(path => lowerUrl.includes(path));
-  
-  // Only consider it an API if both domain and path suggest it's API documentation
-  if (domainMatch && pathMatch) {
-    return true;
-  }
-  
-  // More conservative check: if title has "API" as a standalone word (not part of another word)
-  if (/\bapi\b/i.test(lowerTitle) && 
-      (domainMatch || pathMatch || lowerTitle.includes("documentation") || 
-       lowerTitle.includes("reference") || lowerTitle.includes("developer"))) {
-    return true;
-  }
-  
-  return false;
+  return titleMatches || urlMatches;
 }

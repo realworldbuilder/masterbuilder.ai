@@ -2,7 +2,6 @@ import Image from "next/image";
 import { FC } from "react";
 import InitialInputArea from "./InitialInputArea";
 import { suggestions } from "@/utils/utils";
-import camelLogo from "../public/camel_whitebg.png";
 
 type THeroProps = {
   promptValue: string;
@@ -33,13 +32,6 @@ const Hero: FC<THeroProps> = ({
           href="https://togetherai.link/"
           target="_blank"
         >
-          <Image
-            src={camelLogo}
-            alt="camel"
-            width={28}
-            height={28}
-            className="object-contain"
-          />
           <span className="text-center text-sm font-medium italic">
             Powered by <b>Llama 3.1</b> and <b>Together AI</b>
           </span>
@@ -92,7 +84,7 @@ const Hero: FC<THeroProps> = ({
           Fully open source!{" "}
           <span className="text-sm font-medium text-primary underline">
             <a
-              href="https://github.com/Nutlope/llamatutor"
+              href="https://github.com/realworldbuilder/masterbuilder.ai"
               target="_blank"
               rel="noopener noreferrer"
             >

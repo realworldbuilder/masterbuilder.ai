@@ -1,37 +1,42 @@
-<a href="https://www.llamatutor.com">
-  <img alt="Llama Tutor" src="./public/og-image.png">
-  <h1 align="center">Llama Tutor</h1>
+<a href="https://masterbuilder.ai">
+  <img alt="MasterBuilder" src="./public/newog.png">
+  <h1 align="center">MasterBuilder</h1>
 </a>
 
 <p align="center">
-  An open source AI personal tutor. Powered by Llama 3 70B & Together.ai
+  An intelligent coding assistant for developers. Powered by Llama 3.1 & Together.ai
 </p>
+
+## Features
+
+- Find relevant APIs and documentation for your development needs
+- Get expert guidance on implementing technical solutions
+- Simple and clean interface focused on developer experience
+- Personalized responses based on your builder level
 
 ## Tech stack
 
-- Llama 3.1 70B from Meta for the LLM
+- Meta's Llama 3.1 8B Instruct Turbo for the language model
 - Together AI for LLM inference
-- Next.js app router with Tailwind
-- Serper for the search API
-- Helicone for observability
-- Plausible for website analytics
+- Next.js 14 with app router and Tailwind CSS
+- Serper for web search capabilities 
+- Helicone for API usage tracking
+- RAG system for enhanced responses with up-to-date information
 
-## Cloning & running
+## Setup & Installation
 
-1. Fork or clone the repo
-2. Create an account at [Together AI](https://togetherai.link) for the LLM
-3. Create an account at [SERP API](https://serper.dev/) or with Azure ([Bing Search API](https://www.microsoft.com/en-us/bing/apis/bing-web-search-api))
-4. Create an account at [Helicone](https://www.helicone.ai/) for observability
-5. Create a `.env` (use the `.example.env` for reference) and replace the API keys
-6. Run `npm install` and `npm run dev` to install dependencies and run locally
+1. Clone the repository
+2. Create an account at [Together AI](https://together.ai) for LLM access
+3. Get API keys from [SERP API](https://serper.dev/) or [Bing Search API](https://www.microsoft.com/en-us/bing/apis/bing-web-search-api)
+4. Create an account at [Helicone](https://www.helicone.ai/) for monitoring
+5. Create a `.env` file (use `.example.env` as reference) and add your API keys
+6. Run `npm install` and `npm run dev` to start development
 
-## Future Tasks
+## Roadmap
 
-- [ ] Add a share & copy buttons that folks can click on after convos are generated
-- [ ] Add potential follow up questions + new chat at the end of chat page
-- [ ] Split the page into two pages and add back the footer
-- [ ] Move all my icons into their own typescript file (transform.tools)
-- [ ] Add a more detailed landing page with a nice section with the GitHub link
-- [ ] Add nice hamburger menu on mobile
-- [ ] Try out the generative UI stuff from Vercel
-- [ ] Add a nicer dropdown overall
+- [ ] Add sharing capabilities for generated responses
+- [ ] Implement suggested follow-up questions
+- [ ] Enhance the UI with more responsive design elements
+- [ ] Add user authentication for personalized experiences
+- [ ] Implement more advanced API discovery features
+- [ ] Support more programming languages and frameworks
